@@ -2,6 +2,7 @@ import React from 'react'
 import { useState,useContext} from 'react';
 import {db} from "../FirebaseConfig";
 import { AuthContext } from '../context/AuthContext';
+import { ChatContext } from '../context/ChatContext';
 import {
   collection,
   query,
@@ -19,7 +20,8 @@ function SearchBar() {
   const [user, setUser] = useState(null);
   const [err, setErr] = useState(false);
   const { currentUser } = useContext(AuthContext);
-
+  const { dispatch } = useContext(ChatContext);
+  
   const handleSearch=async ()=>{
     const q = query(collection(db, "users"), where("displayName", "==", username));
     
@@ -72,6 +74,9 @@ function SearchBar() {
           [combinedId + ".date"]: serverTimestamp(),
         });
       }
+      else{
+        console.log(res);
+      }
     } catch (err) {}
 
     setUser(null);
@@ -95,7 +100,6 @@ function SearchBar() {
 
                   <div className="name"><span id="uname">{user.displayName}</span> <time>7:00 PM</time></div>
                   
-                  <div className="msg"><span>✓  </span>This is a message </div>
               </div>
           </li>       
         </ul>
