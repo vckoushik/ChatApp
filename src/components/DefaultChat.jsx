@@ -1,13 +1,15 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import { AuthContext } from '../context/AuthContext';
 
 function DefaultChat() {
+  const { currentUser } = useContext(AuthContext);
   return (
     <section className="chat-box">
-    <img src="https://via.placeholder.com/300" alt="temp"/>
-    <h2>Keep your phone connected.</h2>
-    <p>WhatsApp connects to your phone to sync messages.To reduce data usage,connect your phone to Wi-Fi</p>   
+    <img src={currentUser.photoURL} alt="temp"/>
+    <h2>Welcome to ChatApp</h2>
+    <p>Chat with your loved ones.</p>   
     </section>
   )
 }
 
-export default DefaultChat
+export default DefaultChat;

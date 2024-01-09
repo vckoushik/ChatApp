@@ -5,6 +5,7 @@ import { signOut } from 'firebase/auth';
 import { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { auth } from '../FirebaseConfig';
+import Chats from './Chats';
 
 function SideBar() {
   const { currentUser } = useContext(AuthContext);
@@ -31,13 +32,8 @@ function SideBar() {
         </menu>   
     </nav>
     <SearchBar/>
-
-    <div className="user">
-        <ul>
-            <ChatItem/>  
-            <ChatItem/>          
-        </ul>
-    </div>
+    
+    <Chats/>
 </section>
   )
 }
