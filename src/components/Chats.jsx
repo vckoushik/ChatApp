@@ -24,7 +24,7 @@ function Chats() {
   const handleSelect = (u) => {
     dispatch({ type: "CHANGE_USER", payload: u });
   };
-  
+
   const capital=(word)=>{
     const capitalized =
   word.charAt(0).toUpperCase()
@@ -32,6 +32,10 @@ function Chats() {
   return capitalized;
 
   }
+  const displayTime= (time)=>{
+    return time.toDate.toLocaleTimeString('en-US');
+  }
+  console.log(chats);
   return (
     <div className="user">
        
@@ -41,7 +45,7 @@ function Chats() {
                 <img src={chat[1].userInfo.photoURL} alt="ProfileImg"/>
                 <div className="column padding">
 
-                    <div className="name"><span id="uname">{capital(chat[1].userInfo.displayName)}</span> <time>7:00 PM</time></div>
+                    <div className="name"><span id="uname">{capital(chat[1].userInfo.displayName)}</span> <time>{chat[1].lastMessageTime?.currentTime && chat[1].lastMessageTime?.currentTime.toDate().toLocaleTimeString('en-US')}</time></div>
                     
                     <div className="msg"><span>✓  </span>{chat[1].lastMessage?.text}</div>
                 </div>

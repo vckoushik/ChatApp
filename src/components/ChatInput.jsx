@@ -59,10 +59,13 @@ function ChatInput() {
         }),
       });
     }
-
+    const currentTime = Timestamp.now();
     await updateDoc(doc(db, "userChats", currentUser.uid), {
       [data.chatId + ".lastMessage"]: {
         text,
+      },
+      [data.chatId + ".lastMessageTime"]: {
+        currentTime,
       },
       [data.chatId + ".date"]: serverTimestamp(),
     });
@@ -71,15 +74,23 @@ function ChatInput() {
       [data.chatId + ".lastMessage"]: {
         text,
       },
+      [data.chatId + ".lastMessageTime"]: {
+        currentTime,
+      },
       [data.chatId + ".date"]: serverTimestamp(),
     });
 
     setText("");
     setImg(null);
   };
+  const handleKeyDown = (event) => {
+    if(event.key === 'Enter'){
+      handleSend();
+    }
+  }
   return (
     <div className="msg-box">
-        <input type="text" value={text} onChange={e=>setText(e.target.value)} placeholder="Type a message" name="message" />
+        <input type="text" onKeyDown={handleKeyDown} value={text} onChange={e=>setText(e.target.value)} placeholder="Type a message" name="message" />
         <div>
             <img src={Attach} alt="" />
             <input className="attach"

@@ -1,9 +1,10 @@
 import React from 'react'
-import {auth, provider} from '../FirebaseConfig';
-import {signInWithPopup,signInWithEmailAndPassword} from 'firebase/auth'
+import {auth, provider,db,storage} from '../FirebaseConfig';
+import {signInWithPopup,signInWithEmailAndPassword, updateProfile} from 'firebase/auth'
 import Cookies from 'universal-cookie';
 import { useState } from 'react';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { doc, setDoc } from "firebase/firestore";
 
 const cookies= new Cookies();
 function Login(props) {
@@ -26,9 +27,23 @@ function Login(props) {
 
   const handleGoogleSignIn= async ()=>{
     try{
-      const result = await signInWithPopup(auth,provider);
-      cookies.set("auth-token",result.user.refreshToken);
-     // setIsAuth(true);
+      const res = await signInWithPopup(auth,provider);
+      const date = new Date().getTime();
+      const displayName=res.user.displayName;
+      const photoURL = res.user.photoURL;
+      const email = res.user.email;
+     
+      //create user on firestore
+      await setDoc(doc(db, "users", res.user.uid), {
+        uid: res.user.uid,
+        displayName,
+        email,
+        photoURL,
+      });
+
+      //create empty user chats on firestore
+      await setDoc(doc(db, "userChats", res.user.uid), {});
+      navigate("/");
     }catch(err){
       console.log(err);
       //setIsAuth(false);
