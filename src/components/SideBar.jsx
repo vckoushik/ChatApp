@@ -1,15 +1,23 @@
 import React from 'react'
-import ChatItem from './ChatItem'
 import SearchBar from './SearchBar'
 import { signOut } from 'firebase/auth';
 import { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { auth } from '../FirebaseConfig';
 import Chats from './Chats';
+import { ChatContext } from '../context/ChatContext';
 
 function SideBar() {
   const { currentUser } = useContext(AuthContext);
-  
+  const { dispatch } = useContext(ChatContext);
+  const handleSignOut=()=>{
+    const INITIAL_STATE = {
+        chatId: "null",
+        user: {},
+      };
+     dispatch({ type: "CHANGE_USER", payload: INITIAL_STATE});
+     signOut(auth);
+  }
   return (
     <section className="user-list">
     <nav className="padding">
@@ -25,7 +33,7 @@ function SideBar() {
                 <ul className="dropdown-list">
                     <li>Profile</li>
                     <li>Settings</li>
-                    <li onClick={()=>signOut(auth)} style={{cursor:'pointer'}}>Logout</li>
+                    <li onClick={handleSignOut} style={{cursor:'pointer'}}>Logout</li>
                 </ul>
                 </div>
             </div>

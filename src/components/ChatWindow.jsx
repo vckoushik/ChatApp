@@ -19,20 +19,18 @@ function ChatWindow() {
           unSub();
         };
       }, [data.chatId]);
-  const capital=(word)=>{
-    const capitalized =
-  word.charAt(0).toUpperCase()
-  + word.slice(1)
-  return capitalized;
 
+  const capital=(word)=>{
+        const capitalized =
+      word.charAt(0).toUpperCase()
+      + word.slice(1)
+      return capitalized;
   }
+
   if(data.user?.displayName)
   {
-
   return (
-    
     <section id="chat-container">
-    
     <header className="padding">
         <img src={data.user.photoURL} alt="ProfileImg" />
         <div>

@@ -2,7 +2,6 @@ import React from 'react'
 import { useState,useContext} from 'react';
 import {db} from "../FirebaseConfig";
 import { AuthContext } from '../context/AuthContext';
-import { ChatContext } from '../context/ChatContext';
 import {
   collection,
   query,
@@ -20,7 +19,6 @@ function SearchBar() {
   const [user, setUser] = useState(null);
   const [err, setErr] = useState(false);
   const { currentUser } = useContext(AuthContext);
-  const { dispatch } = useContext(ChatContext);
   
   const handleSearch=async ()=>{
     const q = query(collection(db, "users"), where("displayName", "==", username));
@@ -31,7 +29,7 @@ function SearchBar() {
         // doc.data() is never undefined for query doc snapshots
         setUser(doc.data());
       });
-      console.log(user);
+      //console.log(user);
     }
     catch(err){
       setErr(true);

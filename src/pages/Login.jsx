@@ -1,12 +1,12 @@
 import React from 'react'
-import {auth, provider,db,storage} from '../FirebaseConfig';
-import {signInWithPopup,signInWithEmailAndPassword, updateProfile} from 'firebase/auth'
-import Cookies from 'universal-cookie';
+import {auth, provider,db} from '../FirebaseConfig';
+import {signInWithPopup,signInWithEmailAndPassword} from 'firebase/auth'
+//import Cookies from 'universal-cookie';
 import { useState } from 'react';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
-import { doc, setDoc } from "firebase/firestore";
+import { Link, useNavigate } from 'react-router-dom';
+import { doc, setDoc,getDoc} from "firebase/firestore";
 
-const cookies= new Cookies();
+//const cookies= new Cookies();
 function Login(props) {
   //const {setIsAuth} = props;
   const navigate = useNavigate();
@@ -23,12 +23,12 @@ function Login(props) {
     } catch (err) {
       setErr(true);
     }
-  };
+  }; 
 
   const handleGoogleSignIn= async ()=>{
     try{
       const res = await signInWithPopup(auth,provider);
-      const date = new Date().getTime();
+      //const date = new Date().getTime();
       const displayName=res.user.displayName;
       const photoURL = res.user.photoURL;
       const email = res.user.email;
@@ -41,12 +41,17 @@ function Login(props) {
         photoURL,
       });
 
-      //create empty user chats on firestore
-      await setDoc(doc(db, "userChats", res.user.uid), {});
+      //Check if user exists or not then create empty user chats
+      
+      const userchats = await getDoc(doc(db, "userChats", res.user.uid));
+      
+      if (!userchats.data()) {
+        console.log("user chat not found");
+        await setDoc(doc(db, "userChats", res.user.uid), {});
+      }
       navigate("/");
     }catch(err){
-      console.log(err);
-      //setIsAuth(false);
+      setErr(true);
     }
    
     

@@ -2,11 +2,14 @@ import './App.css';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import NotFound from './pages/NotFound';
+import Demo from './pages/Demo';
 import {Routes,Route,Navigate} from 'react-router-dom';
 import Home from './pages/Home';
 import { useContext } from 'react';
 import Cookies from 'universal-cookie';
 import { AuthContext } from './context/AuthContext';
+
+
 function App() {
   
   const { currentUser } = useContext(AuthContext);
@@ -34,6 +37,7 @@ function App() {
           />
         <Route  path="login" element={<Login/>}></Route>
         <Route  path="signup" element={<Register/>}></Route>
+        <Route  path="demo" element={<Demo/>}></Route>
         <Route  path="*" element={<NotFound />}></Route>
         </Route>
      </Routes>

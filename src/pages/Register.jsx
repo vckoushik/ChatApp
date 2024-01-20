@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import {auth, db, storage} from '../FirebaseConfig';
 import {createUserWithEmailAndPassword,updateProfile } from 'firebase/auth'
@@ -57,11 +57,11 @@ function Register() {
             });
             //create user on firestore
             await setDoc(doc(db, "users", res.user.uid), {
-              uid: res.user.uid,
+              uid: res.user.uid, 
               displayName,
               email,
               photoURL: downloadURL,
-            });
+            }); 
 
             //create empty user chats on firestore
             await setDoc(doc(db, "userChats", res.user.uid), {});

@@ -90,7 +90,7 @@ function ChatInput() {
   }
   return (
     <div className="msg-box">
-        <input type="text" onKeyDown={handleKeyDown} value={text} onChange={e=>setText(e.target.value)} placeholder="Type a message" name="message" />
+        <input type="text" onKeyDown={handleKeyDown} value={text} onChange={e=>setText(e.target.value)} placeholder="Type a message" name="message" autoComplete='off'/>
         <div>
             <img src={Attach} alt="" />
             <input className="attach"
