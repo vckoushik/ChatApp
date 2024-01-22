@@ -4,7 +4,7 @@ import {signInWithPopup,signInWithEmailAndPassword} from 'firebase/auth'
 //import Cookies from 'universal-cookie';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { doc, setDoc,getDoc} from "firebase/firestore";
+import { doc, setDoc,getDoc,updateDoc} from "firebase/firestore";
 
 //const cookies= new Cookies();
 function Login(props) {
@@ -18,7 +18,9 @@ function Login(props) {
     const password = e.target[1].value;
     try {
       const res = await signInWithEmailAndPassword(auth, email, password);
-      console.log(res);
+      await updateDoc(doc(db, "users", res.user.uid), {
+        status: "online"
+      });
       navigate("/");
     } catch (err) {
       setErr(true);
@@ -32,13 +34,14 @@ function Login(props) {
       const displayName=res.user.displayName;
       const photoURL = res.user.photoURL;
       const email = res.user.email;
-     
+      const status = "online";
       //create user on firestore
       await setDoc(doc(db, "users", res.user.uid), {
         uid: res.user.uid,
         displayName,
         email,
         photoURL,
+        status
       });
 
       //Check if user exists or not then create empty user chats

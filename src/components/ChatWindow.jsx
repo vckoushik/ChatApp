@@ -8,6 +8,7 @@ import DefaultChat from './DefaultChat';
 
 function ChatWindow() {
     const [messages,setMessages] = useState([]);
+    const [status,setStatus] = useState("");
     const {data} = useContext(ChatContext);
 
     useEffect(() => {
@@ -18,7 +19,22 @@ function ChatWindow() {
         return () => {
           unSub();
         };
-      }, [data.chatId]);
+      }, [data?.chatId]);
+
+      useEffect(() => {
+        const userStatus = async ()=>{
+          const unSub = onSnapshot(doc(db, "users", data?.user?.uid), (doc) => {
+            doc.exists() && setStatus(doc?.data()?.status);
+          });
+          return () => {
+            unSub();
+          };
+        }
+       if(data?.chatId !=="null"){
+          userStatus();
+       }
+
+      }, [data?.user?.uid,data?.chatId]);
 
   const capital=(word)=>{
         const capitalized =
@@ -27,20 +43,29 @@ function ChatWindow() {
       return capitalized;
   }
 
+  let statusIcon = "bi bi-check-circle";
+  let statusColor= "green";
   if(data.user?.displayName)
   {
+    if(status === "offline"){
+      statusIcon = "bi bi-x-circle-fill";
+      statusColor= "red";
+    }
+    else{
+      statusColor= "green";
+      statusIcon = "bi bi-check-circle";
+    }
   return (
     <section id="chat-container">
     <header className="padding">
         <img src={data.user.photoURL} alt="ProfileImg" />
         <div>
             <div className="name">{capital(data.user?.displayName)}</div>
-            <div className="lastseen">last seen today</div>
+           
+            <div className="lastseen"><i style={{color: statusColor }} className={statusIcon}></i>{status}</div>
         </div>
         <div>
-            <button>✆</button>
-            <button>✉</button>
-            <button>☰</button>
+            
         </div>
     </header>
     <div className="chat-area">
@@ -65,4 +90,4 @@ else{
 }
 
 
-export default ChatWindow
+export default ChatWindow;

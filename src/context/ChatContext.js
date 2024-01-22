@@ -9,6 +9,7 @@ import {
   
   export const ChatContextProvider = ({ children }) => {
     const { currentUser } = useContext(AuthContext);
+
     const INITIAL_STATE = {
       chatId: "null",
       user: {},
@@ -17,14 +18,20 @@ import {
     const chatReducer = (state, action) => {
       switch (action.type) {
         case "CHANGE_USER":
-          return {
-            user: action.payload,
-            chatId:
-              currentUser.uid > action.payload.uid
-                ? currentUser.uid + action.payload.uid
-                : action.payload.uid + currentUser.uid,
-          };
-  
+          if(action.payload.uid){
+            return {
+              user: action.payload,
+              chatId:
+                currentUser.uid > action.payload.uid
+                  ? currentUser.uid + action.payload.uid
+                  : action.payload.uid + currentUser.uid,
+            };
+    
+          }
+          else{
+            return null;
+          }
+          
         default:
           return state;
       }
